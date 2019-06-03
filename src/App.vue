@@ -7,12 +7,18 @@
             <p>I Love U</p>
             <img :src="love">
         </div>
+        <br>
+<!--        <div id="qr">-->
+<!--            <p id="qr_title">给刁爷发红包</p>-->
+<!--            <img id="qrcode_img" :src="qrcode">-->
+<!--        </div>-->
     </div>
 </template>
 
 <script>
     import LinkGroup from './components/LinkGroup.vue'
     import love from './../static/images/love.png'
+    // import qrcode from './../static/images/qrcode.png'
     import links from './../static/links.json'
 
     export default {
@@ -23,6 +29,7 @@
         data: function () {
             return {
                 love: love,
+                // qrcode: qrcode,
                 links: links
             }
         }
@@ -45,7 +52,6 @@
         -webkit-box-align: center;
         -webkit-box-orient: vertical;
         text-align: center;
-        padding-top: 60px;
     }
 
     li {
