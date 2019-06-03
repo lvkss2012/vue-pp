@@ -1,0 +1,232 @@
+[
+  {
+    "groupName": "文档",
+    "linkGroups": [
+      [
+        {
+          "name": "Node",
+          "url": "https://nodejs.org/dist/latest-v10.x/docs/api/"
+        }
+      ],
+      [
+        {
+          "name": "Mongo",
+          "url": "https://docs.mongodb.com/manual/tutorial/getting-started/"
+        },
+        {
+          "name": "mongoosejs",
+          "url": "http://mongoosejs.com/"
+        },
+        {
+          "name": "3.1",
+          "url": "http://mongodb.github.io/node-mongodb-native/3.1/api/"
+        },
+        {
+          "name": "2.1",
+          "url": "https://mongodb.github.io/node-mongodb-native/2.1/api/"
+        }
+      ],
+      [
+        {
+          "name": "university",
+          "url": "https://university.mongodb.com/"
+        },
+        {
+          "name": "courses",
+          "url": "https://university.mongodb.com/courses/catalog"
+        },
+        {
+          "name": "dba",
+          "url": "https://university.mongodb.com/certification/dba/about?offering=C100DBA/2019_June"
+        }
+      ],
+      [
+        {
+          "name": "RabbitMQ",
+          "url": "https://www.rabbitmq.com/"
+        },
+        {
+          "name": "redis",
+          "url": "https://redis.io/"
+        },
+        {
+          "name": "redis菜鸟教程",
+          "url": "http://www.runoob.com/redis/redis-tutorial.html"
+        }
+      ],
+      [
+        {
+          "name": "dubbo",
+          "url": "https://dubbo.incubator.apache.org/#!/docs/user/quick-start.md?lang=zh-cn"
+        }
+      ],
+      [
+        {
+          "name": "MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+        },
+        {
+          "name": "Global_Objects",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects"
+        }
+      ],
+      [
+        {
+          "name": "PM2",
+          "url": "https://pm2.io/doc/en/runtime/overview/"
+        },
+        {
+          "name": "PM2",
+          "url": "http://pm2.keymetrics.io/docs/usage/startup/"
+        }
+      ],
+      [
+        {
+          "name": "expressjs",
+          "url": "http://www.expressjs.com.cn/"
+        }
+      ],
+      [
+        {
+          "name": "React",
+          "url": "https://reactjs.org/docs/react-api.html"
+        }
+      ],
+      [
+        {
+          "name": "SocketIO",
+          "url": "https://socket.io/docs/"
+        }
+      ],
+      [
+        {
+          "name": "CSS参考手册",
+          "url": "http://www.w3school.com.cn/cssref/index.asp"
+        },
+        {
+          "name": "CSS布局",
+          "url": "http://zh.learnlayout.com/"
+        },
+        {
+          "name": "htmldog",
+          "url": "http://www.htmldog.com/guides/css/"
+        }
+      ]
+    ]
+  },
+  {
+    "groupName": "Java",
+    "linkGroups": [
+      [
+        {
+          "name": "mvnrepository",
+          "url": "https://mvnrepository.com"
+        }
+      ],
+      [
+        {
+          "name": "maven",
+          "url": "https://maven.apache.org/index.html"
+        }
+      ],
+      [
+        {
+          "name": "Java Doc",
+          "url": "https://docs.oracle.com/en"
+        }
+      ]
+    ]
+  },
+  {
+    "groupName": "视频",
+    "linkGroups": [
+      [
+        {
+          "name": "腾讯视频",
+          "url": "https://v.qq.com/"
+        }
+      ],
+      [
+        {
+          "name": "优酷视频",
+          "url": "http://www.youku.com/"
+        }
+      ],
+      [
+        {
+          "name": "爱奇艺",
+          "url": "http://www.iqiyi.com/"
+        }
+      ]
+    ]
+  },
+  {
+    "groupName": "搜索",
+    "linkGroups": [
+      [
+        {
+          "name": "百度",
+          "url": "https://www.baidu.com/"
+        }
+      ],
+      [
+        {
+          "name": "谷歌",
+          "url": "https://www.google.com/"
+        }
+      ]
+    ]
+  },
+  {
+    "groupName": "购物",
+    "linkGroups": [
+      [
+        {
+          "name": "淘宝",
+          "url": "https://www.taobao.com/"
+        }
+      ],
+      [
+        {
+          "name": "天猫",
+          "url": "https://www.tmall.com/"
+        }
+      ],
+      [
+        {
+          "name": "京东",
+          "url": "https://www.jd.com/"
+        }
+      ],
+      [
+        {
+          "name": "当当",
+          "url": "http://www.dangdang.com/"
+        }
+      ],
+      [
+        {
+          "name": "亚马逊",
+          "url": "https://www.amazon.cn/"
+        }
+      ]
+    ]
+  },
+  {
+    "groupName": "其他",
+    "linkGroups": [
+      [
+        {
+          "name": "亚马逊云主机",
+          "url": "https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#"
+        }
+      ],
+      [
+        {
+          "name": "icloud",
+          "url": "https://www.icloud.com/"
+        }
+      ]
+    ]
+  }
+]

@@ -22,6 +22,6 @@
 
 <style scoped>
     li {
-        margin-left: 0px;
+        margin: 10px;
     }
 </style>

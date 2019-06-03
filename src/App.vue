@@ -1,29 +1,29 @@
 <template>
     <div id="app">
-        <LinkRow :links="links"/>
+        <div id="nv">
+            <LinkGroup v-for="item of links" :linkGroups="item.linkGroups" :groupName="item.groupName"/>
+        </div>
+        <div>
+            <p>I Love U</p>
+            <img :src="love">
+        </div>
     </div>
 </template>
 
 <script>
-    import LinkRow from './components/LinkRow.vue'
+    import LinkGroup from './components/LinkGroup.vue'
+    import love from './../static/images/love.png'
+    import links from './../static/links.json'
 
     export default {
         name: "app",
         components: {
-            LinkRow
+            LinkGroup
         },
         data: function () {
             return {
-                links: [
-                    {
-                        name: 'baidu',
-                        url: 'http://www.baidu.com'
-                    },
-                    {
-                        name: 'baidu1',
-                        url: 'http://www.baidu.com'
-                    }
-                ]
+                love: love,
+                links: links
             }
         }
     }
@@ -35,5 +35,20 @@
         padding: 0px;
     }
 
-    /*@import url("//unpkg.com/element-ui@2.9.1/lib/theme-chalk/index.css");*/
+    body {
+        background-color: #f2f4f7;
+    }
+
+    #app {
+        display: -webkit-box;
+        -webkit-box-pack: center;
+        -webkit-box-align: center;
+        -webkit-box-orient: vertical;
+        text-align: center;
+        padding-top: 60px;
+    }
+
+    li {
+        margin: 10px;
+    }
 </style>
