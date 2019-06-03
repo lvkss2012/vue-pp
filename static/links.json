@@ -97,6 +97,17 @@
           "name": "SocketIO",
           "url": "https://socket.io/docs/"
         }
+      ]
+    ]
+  },
+  {
+    "groupName": "WEB",
+    "linkGroups": [
+      [
+        {
+          "name": "element-ui",
+          "url": "https://element.eleme.cn/#/zh-CN/component/installation"
+        }
       ],
       [
         {
