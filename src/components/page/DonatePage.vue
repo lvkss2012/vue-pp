@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import qrcode from './../../static/images/qrcode.png'
+    import qrcode from '../../../static/images/qrcode.png'
 
     export default {
         name: "DonatePage",

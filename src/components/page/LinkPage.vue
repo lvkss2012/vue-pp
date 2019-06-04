@@ -12,9 +12,9 @@
 
 <script>
     import LinkGroup from './LinkGroup.vue'
-    import love from './../../static/images/love.png'
-    import links from './../../static/links.json'
-    import Navigation from './Navigation.vue'
+    import love from '../../../static/images/love.png'
+    import links from '../../../static/links.json'
+    import Navigation from '../common/Navigation.vue'
 
     export default {
         name: "LinkPage",

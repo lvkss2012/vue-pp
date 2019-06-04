@@ -11,21 +11,21 @@ export default new Router({
         },
         {
             path: '/',
-            component: resolve => require(['../components/Home.vue'], resolve),
+            component: resolve => require(['../components/common/Home.vue'], resolve),
             children: [
                 {
                     path: '/links',
-                    component: resolve => require(['../components/LinkPage.vue'], resolve),
+                    component: resolve => require(['../components/page/LinkPage.vue'], resolve),
                     meta: {title: '导航'}
                 },
                 {
                     path: '/articles',
-                    component: resolve => require(['../components/ArticluePage.vue'], resolve),
+                    component: resolve => require(['../components/page/ArticluePage.vue'], resolve),
                     meta: {title: '文章'}
                 },
                 {
                     path: '/donates',
-                    component: resolve => require(['../components/DonatePage.vue'], resolve),
+                    component: resolve => require(['../components/page/DonatePage.vue'], resolve),
                     meta: {title: '打赏'}
                 },
                 {
