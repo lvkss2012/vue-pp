@@ -2,9 +2,11 @@
     <el-menu
             :default-active="activeIndex"
             class="el-menu-nav"
-            mode="horizontal">
-        <el-menu-item index="1">导航</el-menu-item>
-        <el-menu-item index="2">文章</el-menu-item>
+            mode="horizontal"
+            router
+    >
+        <el-menu-item index="links" key="links">导航</el-menu-item>
+        <el-menu-item index="articles" key="articles">文章</el-menu-item>
     </el-menu>
 </template>
 
