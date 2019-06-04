@@ -24,6 +24,11 @@ export default new Router({
                     meta: {title: '文章'}
                 },
                 {
+                    path: '/donates',
+                    component: resolve => require(['../components/DonatePage.vue'], resolve),
+                    meta: {title: '打赏'}
+                },
+                {
                     path: '/404',
                     component: resolve => require(['../components/page/404.vue'], resolve),
                     meta: {title: '404'}
