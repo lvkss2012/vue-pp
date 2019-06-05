@@ -45,7 +45,7 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            title: "I love dsj",
+            title: "I love U",
             filename: "index.html",
             template: "./public/template.html"
         }),

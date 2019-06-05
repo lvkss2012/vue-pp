@@ -4,7 +4,8 @@
 
 ## Directory-based project format:
 .idea/
-#dist/
+dist/
+public/dist/
 public/*.zip
 
 ## File-based project format:
