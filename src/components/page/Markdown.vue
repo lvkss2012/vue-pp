@@ -1,6 +1,8 @@
 <template>
     <div class="container">
-        <mavon-editor v-model="content" ref="md" @imgAdd="$imgAdd" @change="change" style="min-height: 600px"/>
+        <el-input v-model="title" placeholder="请输入标题"></el-input>
+        <mavon-editor class="markdown-body" v-model="content" ref="md" @imgAdd="$imgAdd" @change="change"
+                      style="min-height: 600px"/>
         <el-button class="editor-btn" type="primary" @click="submit">提交</el-button>
     </div>
 </template>
@@ -10,10 +12,14 @@
     import 'mavon-editor/dist/css/index.css'
 
     export default {
-        name: 'markdown',
+        name: 'MarkDown',
+        props: {
+            userId: String,
+            title: String,
+            content: String
+        },
         data: function () {
             return {
-                content: '',
                 html: ''
             }
         },
@@ -37,17 +43,28 @@
             },
             change(value, render) {
                 // render 为 markdown 解析后的结果
-                this.html = render;
+                this.content = value;
             },
             submit() {
-                console.log(this.content);
-                console.log(this.html);
+                this.$axios({
+                    url: 'articules',
+                    method: 'post',
+                    data: {
+                        userId: this.userId,
+                        content: this.content,
+                        title: this.title
+                    }
+                })
                 this.$message.success('提交成功！');
             }
         }
     }
 </script>
 <style scoped>
+    .markdown-body {
+        margin-top: 20px;
+    }
+
     .editor-btn {
         margin-top: 20px;
     }
