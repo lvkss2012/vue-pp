@@ -13,19 +13,30 @@
                     >
                     </el-option>
                 </el-select>
+                <el-button type="primary" plain icon="el-icon-plus" @click="onButtonAddClicked"></el-button>
                 <div class="articlue-wrapper">
                     <ul>
                         <li v-for="articule of showArticules" @click="handleNodeClick(articule, $event)">
-                            <div class="articlue-item">
-                                <h1 class="title">{{articule.title}}</h1>
-                                <el-button-group class="articlue-item-buttons">
-                                    <el-button type="primary" size="mini" plain icon="el-icon-edit"
-                                               @click.stop="onButtonEditClicked"></el-button>
-                                    <el-button type="primary" size="mini" plain icon="el-icon-delete"
-                                               @click.stop="onButtonDeleteClicked"></el-button>
-                                </el-button-group>
-                                <div class="time"> {{articule.updatedAt}}</div>
-                            </div>
+                            <!--                            <div class="articlue-item">-->
+                            <!--                                <h1 class="title">{{articule.title}}</h1>-->
+                            <!--                                <el-button-group class="articlue-item-buttons">-->
+                            <!--                                    <el-button type="primary" size="mini" plain icon="el-icon-edit"-->
+                            <!--                                               :value="articule._id"-->
+                            <!--                                               ref="editButton"-->
+                            <!--                                               @click.stop="onButtonEditClicked"></el-button>-->
+                            <!--                                    <el-button type="primary" size="mini" plain icon="el-icon-delete"-->
+                            <!--                                               :id="articule._id"-->
+                            <!--                                               @click.stop="onButtonDeleteClicked"></el-button>-->
+                            <!--                                </el-button-group>-->
+                            <!--                                <div class="time"> {{articule.updatedAt}}</div>-->
+                            <!--                            </div>-->
+                            <ArticuleItem :key="articule._id"
+                                          :id="articule._id"
+                                          :title="articule.title"
+                                          :updatedAt="articule.updatedAt"
+                                          @onButtonEditClicked="onButtonEditClicked"
+                                          @onButtonDeleteClicked="onButtonDeleteClicked"
+                            />
                         </li>
                     </ul>
                 </div>
@@ -33,7 +44,6 @@
             <el-col :span="21">
                 <Markdown ref="markdown"
                           :userId="userId"
-                          :articlueId="currentArticuleId"
                           v-on:refreshArticlue="refreshArticlue"
                 />
             </el-col>
@@ -43,11 +53,13 @@
 
 <script>
     import Markdown from './Markdown.vue'
+    import ArticuleItem from './ArticuleItem.vue'
 
     export default {
         name: "ArticluePage",
         components: {
-            Markdown
+            Markdown,
+            ArticuleItem
         },
         data: function () {
             return {
@@ -76,18 +88,27 @@
         methods: {
             handleNodeClick(articlue, event) {
                 this.currentArticuleId = articlue._id;
+                this.$refs.markdown.showArticlue(this.currentArticuleId);
             },
             onSelectUser(userId) {
+                this.currentArticuleId = null;
+                this.$refs.markdown.clearContent();
                 this.showArticules = this.allArticules.filter(item => item.userId === this.userId);
             },
-            onButtonEditClicked(event) {
+            onButtonEditClicked(articlueId) {
                 this.$refs.markdown.changeModel(true);
+                this.currentArticuleId = articlueId;
+                this.$refs.markdown.showArticlue(this.currentArticuleId);
             },
-            onButtonDeleteClicked(event) {
-                this.$axios.delete(`articules/${this.currentArticuleId}`)
+            onButtonDeleteClicked(articlueId) {
+                if (!articlueId) {
+                    this.$message.error('未选择文章')
+                    return;
+                }
+                this.$axios.delete(`articules/${articlueId}`)
                     .then(result => {
                         if (result.status === 200) {
-                            this.allArticules = this.allArticules.filter(item => item._id !== this.currentArticuleId);
+                            this.allArticules = this.allArticules.filter(item => item._id !== articlueId);
                             this.showArticules = this.allArticules.filter(item => item.userId === this.userId);
                         }
                     })
@@ -95,11 +116,24 @@
             refreshArticlue(articlue) {
                 if (articlue) {
                     let find = this.allArticules.find(item => item._id === articlue._id);
-                    find.title = articlue.title;
-                    find.content = articlue.content;
-                    find.updatedAt = articlue.updatedAt;
+                    if (find) {
+                        find.title = articlue.title;
+                        find.content = articlue.content;
+                        find.updatedAt = articlue.updatedAt;
+                    } else {
+                        this.allArticules.push(articlue);
+                    }
                 }
-                this.showArticules = this.allArticules.filter(item => item.userId === userId);
+                this.showArticules = this.allArticules.filter(item => item.userId === this.userId);
+            },
+            onButtonAddClicked() {
+                if (!this.userId) {
+                    this.$message.error('先选择用户');
+                    return;
+                }
+                this.currentArticuleId = null;
+                this.$refs.markdown.clearContent();
+                this.$refs.markdown.changeModel(true);
             }
         },
         created() {

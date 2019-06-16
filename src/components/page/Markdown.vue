@@ -23,16 +23,11 @@
     export default {
         name: 'MarkDown',
         props: {
-            userId: String,
-            articlueId: String
-        },
-        watch: {
-            articlueId: function (id) {
-                this.showArticlue(id)
-            }
+            userId: String
         },
         data: function () {
             return {
+                articlueId: '',
                 title: '',
                 content: '',
                 toolbars: toolbars,
@@ -108,7 +103,12 @@
                     this.isEdit = false;
                 }
             },
+            clearContent() {
+                this.title = '';
+                this.content = '';
+            },
             showArticlue(articlueId) {
+                this.articlueId = articlueId;
                 this.$axios.get(`articules/${articlueId}`)
                     .then(result => {
                         if (result.status === 200) {
