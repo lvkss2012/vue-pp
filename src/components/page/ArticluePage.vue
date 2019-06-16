@@ -1,18 +1,41 @@
 <template>
     <div>
         <el-row :gutter="10">
-            <el-col :span="2">
-                <el-tree
-                        class="filter-tree"
-                        :data="menu"
-                        :props="defaultProps"
-                        default-expand-all
-                        @node-click="handleNodeClick"
-                        ref="tree">
-                </el-tree>
+            <el-col :span="3">
+                <el-select v-model="userId"
+                           @change="onSelectUser"
+                           placeholder="请选择用户">
+                    <el-option
+                            v-for="user in users"
+                            :key="user.id"
+                            :label="user.name"
+                            :value="user.id"
+                    >
+                    </el-option>
+                </el-select>
+                <div class="articlue-wrapper">
+                    <ul>
+                        <li v-for="articule of showArticules" @click="handleNodeClick(articule, $event)">
+                            <div class="articlue-item">
+                                <h1 class="title">{{articule.title}}</h1>
+                                <el-button-group class="articlue-item-buttons">
+                                    <el-button type="primary" size="mini" plain icon="el-icon-edit"
+                                               @click.stop="onButtonEditClicked"></el-button>
+                                    <el-button type="primary" size="mini" plain icon="el-icon-delete"
+                                               @click.stop="onButtonDeleteClicked"></el-button>
+                                </el-button-group>
+                                <div class="time"> {{articule.updatedAt}}</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </el-col>
-            <el-col :span="22">
-                <Markdown :userId="userId" :title="title" :content="content"/>
+            <el-col :span="21">
+                <Markdown ref="markdown"
+                          :userId="userId"
+                          :articlueId="currentArticuleId"
+                          v-on:refreshArticlue="refreshArticlue"
+                />
             </el-col>
         </el-row>
     </div>
@@ -31,68 +54,66 @@
                 userId: '',
                 title: '',
                 content: '',
-                menu: [
+                currentArticuleId: '',
+                showArticules: [],
+                allArticules: [],
+                users: [
                     {
                         id: 'lsy',
-                        label: '刘松屹'
+                        name: '刘松屹'
                     },
                     {
                         id: 'lhh',
-                        label: '梁汉辉'
+                        name: '梁汉辉'
                     },
                     {
                         id: 'dsj',
-                        label: '刁世杰'
+                        name: '刁世杰'
                     },
-                ],
-                defaultProps: {
-                    children: 'children',
-                    label: 'label'
-                }
+                ]
             }
         },
         methods: {
-            handleNodeClick(data) {
-                if (data.isArticule) {
-                    this.$axios.get(`articules/${data.id}`)
-                        .then(result => {
-                            if (result.status === 200) {
-                                let articule = result.data && result.data.code === 'SUCCESS' && result.data.data;
-                                this.title = articule.title;
-                                this.content = articule.content;
-                            }
-                        });
-                } else {
-                    this.userId = data.id;
+            handleNodeClick(articlue, event) {
+                this.currentArticuleId = articlue._id;
+            },
+            onSelectUser(userId) {
+                this.showArticules = this.allArticules.filter(item => item.userId === userId);
+            },
+            onButtonEditClicked(event) {
+                this.$refs.markdown.changeModel(true);
+            },
+            onButtonDeleteClicked(event) {
+                this.$axios.delete(`articules/${this.currentArticuleId}`)
+                    .then(result => {
+                        if (result.status === 200) {
+                            this.allArticules = this.allArticules.filter(item => item._id !== this.currentArticuleId);
+                            this.showArticules = this.allArticules.filter(item => item.userId === this.userId);
+                        }
+                    })
+            },
+            refreshArticlue(articlue) {
+                if (articlue) {
+                    let find = this.allArticules.find(item => item._id === articlue._id);
+                    find.title = articlue.title;
+                    find.content = articlue.content;
+                    find.updatedAt = articlue.updatedAt;
                 }
+                this.showArticules = this.allArticules.filter(item => item.userId === userId);
             }
         },
         created() {
             this.$axios.get('articules')
                 .then(result => {
                     if (result.status === 200) {
-                        let articules = result.data && result.data.data;
-                        let articuleGroup = {};
-                        for (let articule of articules) {
-                            if (articuleGroup[articule.userId]) {
-                                articuleGroup[articule.userId].push({
-                                    id: articule._id,
-                                    label: articule.title,
-                                    isArticule: true
-                                });
-                            } else {
-                                articuleGroup[articule.userId] = [{
-                                    id: articule._id,
-                                    label: articule.title,
-                                    isArticule: true
-                                }]
-                            }
-                        }
-
-                        this.menu = this.menu.map(item => {
-                            item.children = articuleGroup[item.id];
-                            return item;
-                        })
+                        this.allArticules = result.data && result.data.data;
+                        // for (let articule of articules) {
+                        //     if (this.articuleGroup[articule.userId]) {
+                        //         this.articuleGroup[articule.userId].push(articule);
+                        //     } else {
+                        //         this.articuleGroup[articule.userId] = [articule]
+                        //     }
+                        // }
                     }
                 })
         }
@@ -100,7 +121,30 @@
 </script>
 
 <style scoped>
-    .filter-tree {
-        /*background-color: rgba(210, 28, 226, 0.35);*/
+    .articlue-item {
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(7, 17, 27, 0.1);
+        /*flex: 1;*/
     }
+
+    .articlue-item-buttons {
+        /*position: absolute;*/
+        right: 2px;
+        bottom: 1px;
+    }
+
+    .title {
+        /*margin-bottom: 4px;*/
+        /*line-height: 12px;*/
+        /*font-weight: 700;*/
+        font-size: 10px;
+        color: rgb(7, 17, 27);
+    }
+
+    .time {
+        /*line-height: 5px;*/
+        font-size: 5px;
+        color: rgb(147, 153, 159);
+    }
+
 </style>

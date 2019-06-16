@@ -1,26 +1,44 @@
 <template>
     <div class="container">
-        <el-input v-model="title" placeholder="请输入标题"></el-input>
-        <mavon-editor class="markdown-body" v-model="content" ref="md" @imgAdd="$imgAdd" @change="change"
+        <el-input v-model="title" placeholder="标题" :readonly="!isEdit"></el-input>
+        <mavon-editor class="markdown-body"
+                      v-model="content"
+                      :boxShadow=true
+                      :toolbarsFlag="toolbarsFlag"
+                      :subfield=false
+                      :defaultOpen="defaultOpen"
+                      ref="md"
+                      @imgAdd="$imgAdd"
+                      @change="change"
                       style="min-height: 600px"/>
-        <el-button class="editor-btn" type="primary" @click="submit">提交</el-button>
+        <el-button class="editor-btn" type="primary" @click="submit" v-show="isEdit">提交</el-button>
     </div>
 </template>
 
 <script>
     import {mavonEditor} from 'mavon-editor'
     import 'mavon-editor/dist/css/index.css'
+    import toolbars from './toolbars.js'
 
     export default {
         name: 'MarkDown',
         props: {
             userId: String,
-            title: String,
-            content: String
+            articlueId: String
+        },
+        watch: {
+            articlueId: function (id) {
+                this.showArticlue(id)
+            }
         },
         data: function () {
             return {
-                html: ''
+                title: '',
+                content: '',
+                toolbars: toolbars,
+                toolbarsFlag: false,
+                defaultOpen: "preview",
+                isEdit: false
             }
         },
         components: {
@@ -46,16 +64,59 @@
                 this.content = value;
             },
             submit() {
-                this.$axios({
-                    url: 'articules',
-                    method: 'post',
-                    data: {
-                        userId: this.userId,
+                if (this.articlueId) {
+                    this.$axios.put(`articules/${this.articlueId}`, {
                         content: this.content,
                         title: this.title
-                    }
-                })
+                    })
+                        .then(result => {
+                            this.changeModel(false);
+                            return result && result.status === 200 && result.data.code === 'SUCCESS' && result.data.data;
+                        })
+                        .then(articlue => {
+                            this.$emit('refreshArticlue', articlue);
+                        })
+                } else {
+                    this.$axios({
+                        url: 'articules',
+                        method: 'post',
+                        data: {
+                            userId: this.userId,
+                            content: this.content,
+                            title: this.title
+                        }
+                    })
+                        .then(result => {
+                            this.changeModel(false);
+                            return result && result.status === 200 && result.data.code === 'SUCCESS' && result.data.data;
+                        })
+                        .then(articlue => {
+                            this.$emit('refreshArticlue', articlue);
+                        })
+                }
+
                 this.$message.success('提交成功！');
+            },
+            changeModel(isEdit) {
+                if (isEdit) {
+                    this.defaultOpen = "edit";
+                    this.toolbarsFlag = true;
+                    this.isEdit = true;
+                } else {
+                    this.defaultOpen = "preview";
+                    this.toolbarsFlag = false;
+                    this.isEdit = false;
+                }
+            },
+            showArticlue(articlueId) {
+                this.$axios.get(`articules/${articlueId}`)
+                    .then(result => {
+                        if (result.status === 200) {
+                            let articule = result.data && result.data.code === 'SUCCESS' && result.data.data;
+                            this.title = articule.title;
+                            this.content = articule.content;
+                        }
+                    });
             }
         }
     }
