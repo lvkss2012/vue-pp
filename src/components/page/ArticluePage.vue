@@ -17,19 +17,6 @@
                 <div class="articlue-wrapper">
                     <ul>
                         <li v-for="articule of showArticules" @click="handleNodeClick(articule, $event)">
-                            <!--                            <div class="articlue-item">-->
-                            <!--                                <h1 class="title">{{articule.title}}</h1>-->
-                            <!--                                <el-button-group class="articlue-item-buttons">-->
-                            <!--                                    <el-button type="primary" size="mini" plain icon="el-icon-edit"-->
-                            <!--                                               :value="articule._id"-->
-                            <!--                                               ref="editButton"-->
-                            <!--                                               @click.stop="onButtonEditClicked"></el-button>-->
-                            <!--                                    <el-button type="primary" size="mini" plain icon="el-icon-delete"-->
-                            <!--                                               :id="articule._id"-->
-                            <!--                                               @click.stop="onButtonDeleteClicked"></el-button>-->
-                            <!--                                </el-button-group>-->
-                            <!--                                <div class="time"> {{articule.updatedAt}}</div>-->
-                            <!--                            </div>-->
                             <ArticuleItem :key="articule._id"
                                           :id="articule._id"
                                           :title="articule.title"
