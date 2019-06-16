@@ -78,7 +78,7 @@
                 this.currentArticuleId = articlue._id;
             },
             onSelectUser(userId) {
-                this.showArticules = this.allArticules.filter(item => item.userId === userId);
+                this.showArticules = this.allArticules.filter(item => item.userId === this.userId);
             },
             onButtonEditClicked(event) {
                 this.$refs.markdown.changeModel(true);
