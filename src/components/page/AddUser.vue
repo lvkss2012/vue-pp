@@ -1,7 +1,7 @@
 <template>
     <div id="hr-add-user">
         <div id="hr-add-user-buttons">
-            <el-link icon="el-icon-caret-left">返回</el-link>
+            <el-link icon="el-icon-caret-left" @click="onBack">返回</el-link>
         </div>
         <div id="hr-add-user-form">
             <el-form
@@ -48,7 +48,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">确定添加</el-button>
+                    <el-button type="primary" @click="onSubmit">保存</el-button>
                     <el-button>取消</el-button>
                 </el-form-item>
             </el-form>
@@ -76,6 +76,9 @@
         methods: {
             onSubmit() {
                 console.log('submit==》' + JSON.stringify(this.form));
+            },
+            onBack() {
+                this.$router.push('/hrManager')
             }
         }
     }

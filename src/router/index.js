@@ -19,6 +19,11 @@ export default new Router({
                     meta: {title: '管理'}
                 },
                 {
+                    path: '/addUser',
+                    component: resolve => require(['../components/page/AddUser.vue'], resolve),
+                    meta: {title: '添加人员'}
+                },
+                {
                     path: '/links',
                     component: resolve => require(['../components/page/LinkPage.vue'], resolve),
                     meta: {title: '导航'}

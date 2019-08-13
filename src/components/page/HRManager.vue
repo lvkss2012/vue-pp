@@ -53,7 +53,7 @@
                         <el-button
                                 type="text"
                                 size="mini"
-                                @click="handleEdit(scope.$index, scope.row)">详情
+                                @click="handleDetail(scope.$index, scope.row)">详情
                         </el-button>
                         <el-button
                                 type="text"
@@ -68,7 +68,7 @@
                         <el-button
                                 type="text"
                                 size="mini"
-                                @click="handleDelete(scope.$index, scope.row)">下载
+                                @click="handleDelete(scope.$index, scope.row)">下载简历
                         </el-button>
                     </template>
                 </el-table-column>
@@ -132,8 +132,13 @@
             }
         },
         methods: {
+            handleDetail(index, row) {
+                console.log(index, row);
+                this.$router.push('/addUser')
+            },
             handleEdit(index, row) {
                 console.log(index, row);
+                this.$router.push('/addUser')
             },
             handleDelete(index, row) {
                 console.log(index, row);
