@@ -14,6 +14,11 @@ export default new Router({
             component: resolve => require(['../components/common/Home.vue'], resolve),
             children: [
                 {
+                    path: '/hrManager',
+                    component: resolve => require(['../components/page/HRManager.vue'], resolve),
+                    meta: {title: '管理'}
+                },
+                {
                     path: '/links',
                     component: resolve => require(['../components/page/LinkPage.vue'], resolve),
                     meta: {title: '导航'}
