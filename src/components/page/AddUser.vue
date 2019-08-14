@@ -48,6 +48,17 @@
                         <el-option label="复试" value="second"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="上传简历">
+                    <el-upload
+                            drag
+                            :on-remove="handleRemove"
+                            :on-success="handleSuccess"
+                            :file-list="fileList"
+                            action="http://localhost:4000/api/v1/files">
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    </el-upload>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onEdit" v-if="readonly">编辑</el-button>
                     <el-button type="primary" @click="onSubmit" v-else>保存</el-button>
@@ -72,13 +83,15 @@
                     interviewer: "",
                     interviewResult: ""
                 },
-                readonly: true
+                readonly: true,
+                fileList: [],
+                fileIds: [],
             }
         },
         methods: {
             onSubmit() {
                 this.readonly = !this.readonly;
-                console.log('submit==》' + JSON.stringify(this.form));
+                console.log('submit==》' + JSON.stringify(this.fileList));
             },
             onEdit() {
                 this.readonly = !this.readonly;
@@ -86,7 +99,17 @@
             },
             onBack() {
                 this.$router.push('/hrManager')
-            }
+            },
+            handleRemove(file, fileList) {
+                console.log(file, fileList);
+                let index = this.fileIds.indexOf(file.response.file);
+                this.fileIds.splice(index, 1);
+                console.log(this.fileIds)
+            },
+            handleSuccess(response, file, fileList) {
+                console.log(response, file, fileList);
+                this.fileIds.push(response.file);
+            },
         }
     }
 </script>
