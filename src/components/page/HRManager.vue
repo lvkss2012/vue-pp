@@ -2,12 +2,13 @@
     <div id="hrManager">
         <div id="hr-buttons">
             <el-button type="primary" size="small">导入</el-button>
-            <el-button type="primary" size="small">新增</el-button>
+            <el-button type="primary" size="small" @click="handleAdd()">新增</el-button>
         </div>
         <div id="hr-tables">
             <el-table
                     stripe
-                    :data="users">
+                    row-key="_id"
+                    :data="candidates">
                 <el-table-column
                         type="index"
                         label="序号"
@@ -58,11 +59,6 @@
                         <el-button
                                 type="text"
                                 size="mini"
-                                @click="handleEdit(scope.$index, scope.row)">编辑
-                        </el-button>
-                        <el-button
-                                type="text"
-                                size="mini"
                                 @click="handleDelete(scope.$index, scope.row)">删除
                         </el-button>
                         <el-button
@@ -80,9 +76,9 @@
                 @current-change="handleCurrentChange"
                 :current-page="1"
                 background
-                page-size="20"
+                :page-size="pageSize"
                 layout="prev, pager, next"
-                :total="50">
+                :total="count">
         </el-pagination>
     </div>
 </template>
@@ -97,48 +93,35 @@
         name: "HRManager",
         data: function () {
             return {
-                users: [
-                    {
-                        position: "QT开发工程师",
-                        name: "古天乐",
-                        phone: "18621767643",
-                        email: "805386312@qq.com",
-                        expectSalary: 100000,
-                        interviewDateTime: "2019-08-13 10:00",
-                        interviewer: "刁世杰",
-                        interviewResult: "淘汰"
-                    },
-                    {
-                        position: "QT开发工程师",
-                        name: "古天乐",
-                        phone: "18621767643",
-                        email: "805386312@qq.com",
-                        expectSalary: 100000,
-                        interviewDateTime: "2019-08-13 10:00",
-                        interviewer: "刁世杰",
-                        interviewResult: "淘汰"
-                    },
-                    {
-                        position: "QT开发工程师",
-                        name: "古天乐",
-                        phone: "18621767643",
-                        email: "805386312@qq.com",
-                        expectSalary: 100000,
-                        interviewDateTime: "2019-08-13 10:00",
-                        interviewer: "刁世杰",
-                        interviewResult: "淘汰"
-                    }
-                ]
+                pageSize: 20,
+                candidates: [],
+                count: 0
             }
         },
+        created: function () {
+            let that = this;
+            this.$axios.get('candidates/count')
+                .then(result => {
+                    if (result.status === 200) {
+                        that.count = result.data && result.data.data && result.data.data.count;
+                        console.log(that.count)
+                    }
+                });
+
+            this.$axios.get('candidates')
+                .then(result => {
+                    if (result.status === 200) {
+                        that.candidates = result.data && result.data.data;
+                    }
+                })
+        },
         methods: {
-            handleDetail(index, row) {
-                console.log(index, row);
+            handleAdd() {
                 this.$router.push('/addUser')
             },
-            handleEdit(index, row) {
+            handleDetail(index, row) {
                 console.log(index, row);
-                this.$router.push('/addUser')
+                this.$router.push({path: 'addUser', query: {_id: row._id}})
             },
             handleDelete(index, row) {
                 console.log(index, row);

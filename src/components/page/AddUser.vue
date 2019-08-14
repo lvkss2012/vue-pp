@@ -6,46 +6,47 @@
         <div id="hr-add-user-form">
             <el-form
                     ref="form"
-                    :model="form"
+                    :model="candidate"
                     size="small"
                     label-width="100px">
                 <el-form-item label="岗位">
-                    <el-select v-model="form.position" placeholder="选择岗位" :disabled="readonly">
-                        <el-option label="C++软件开发工程师" value="cpp"></el-option>
-                        <el-option label="Web前端开发工程师" value="web"></el-option>
-                        <el-option label="3D图形开发工程师" value="3d"></el-option>
+                    <el-select v-model="candidate.position" placeholder="选择岗位" :disabled="readonly">
+                        <el-option label="C++软件开发工程师" value="C++软件开发工程师"></el-option>
+                        <el-option label="Web前端开发工程师" value="Web前端开发工程师"></el-option>
+                        <el-option label="3D图形开发工程师" value="3D图形开发工程师"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input placeholder="填写姓名" v-model="form.name" :readonly="readonly"></el-input>
+                    <el-input placeholder="填写姓名" v-model="candidate.name" :readonly="readonly"></el-input>
                 </el-form-item>
                 <el-form-item label="联系电话">
-                    <el-input placeholder="填写联系电话" v-model="form.phone" :readonly="readonly"></el-input>
+                    <el-input placeholder="填写联系电话" v-model="candidate.phone" :readonly="readonly"></el-input>
                 </el-form-item>
                 <el-form-item label="邮箱">
-                    <el-input placeholder="填写邮箱" v-model="form.email" :readonly="readonly"></el-input>
+                    <el-input placeholder="填写邮箱" v-model="candidate.email" :readonly="readonly"></el-input>
                 </el-form-item>
                 <el-form-item label="薪资要求">
-                    <el-input placeholder="填写薪资要求" v-model="form.expectSalary" :readonly="readonly"></el-input>
+                    <el-input placeholder="填写薪资要求" v-model="candidate.expectSalary" :readonly="readonly"></el-input>
                 </el-form-item>
                 <el-form-item label="通知面试时间">
                     <el-date-picker type="datetime" placeholder="选择面试时间"
                                     :readonly="readonly"
-                                    v-model="form.interviewDateTime"
+                                    v-model="candidate.interviewDateTime"
                                     style="width: 100%;"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="面试人">
-                    <el-select v-model="form.interviewer" placeholder="选择面试人" :disabled="readonly">
-                        <el-option label="耿锋" value="gf"></el-option>
-                        <el-option label="闫守刚" value="ysg"></el-option>
-                        <el-option label="刁世杰" value="dsj"></el-option>
+                    <el-select v-model="candidate.interviewer" placeholder="选择面试人" :disabled="readonly">
+                        <el-option label="耿锋" value="耿锋"></el-option>
+                        <el-option label="闫守刚" value="闫守刚"></el-option>
+                        <el-option label="刁世杰" value="刁世杰"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="面试结果">
-                    <el-select v-model="form.interviewResult" placeholder="选择面试结果" :disabled="readonly">
-                        <el-option label="通过" value="ok"></el-option>
-                        <el-option label="淘汰" value="pass"></el-option>
-                        <el-option label="复试" value="second"></el-option>
+                    <el-select v-model="candidate.interviewResult" placeholder="选择面试结果" :disabled="readonly">
+                        <el-option label="待面试" value="待面试"></el-option>
+                        <el-option label="通过" value="通过"></el-option>
+                        <el-option label="淘汰" value="淘汰"></el-option>
+                        <el-option label="复试" value="复试"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="上传简历">
@@ -73,7 +74,8 @@
         name: "AddUser",
         data: function () {
             return {
-                form: {
+                candidate: {
+                    _id: "",
                     position: "",
                     name: "",
                     phone: "",
@@ -81,34 +83,60 @@
                     expectSalary: "",
                     interviewDateTime: "",
                     interviewer: "",
-                    interviewResult: ""
+                    interviewResult: "",
+                    resumeIds: [],
                 },
                 readonly: true,
                 fileList: [],
-                fileIds: [],
+                currentId: ''
+            }
+        },
+        created: function () {
+            let hash = window.location.hash;
+            let querys = hash && hash.split('?');
+            let id = querys && querys.find(item => item.includes('_id'));
+            this.currentId = id && id.split('=')[1];
+            this.readonly = !!this.currentId;
+            if (this.currentId) {
+                this.$axios.get(`candidates/${this.currentId}`)
+                    .then(result => {
+                        if (result.status === 200) {
+                            this.candidate = result.data && result.data.data;
+                        }
+                    })
             }
         },
         methods: {
             onSubmit() {
+                let data = Object.assign({}, this.candidate);
                 this.readonly = !this.readonly;
-                console.log('submit==》' + JSON.stringify(this.fileList));
+                this.$axios({
+                    url: this.currentId ? `candidates/${this.currentId}` : 'candidates',
+                    method: this.currentId ? 'put' : 'post',
+                    data: data
+                })
+                    .then(result => {
+                        return result && result.status === 200 && result.data.code === 'SUCCESS' && result.data.data;
+                    })
+                    .then(candidate => {
+                        this.candidate = candidate;
+                    })
             },
             onEdit() {
                 this.readonly = !this.readonly;
-                console.log('submit==》' + JSON.stringify(this.form));
             },
             onBack() {
                 this.$router.push('/hrManager')
             },
             handleRemove(file, fileList) {
                 console.log(file, fileList);
-                let index = this.fileIds.indexOf(file.response.file);
-                this.fileIds.splice(index, 1);
-                console.log(this.fileIds)
+                let index = this.candidate.resumeIds.indexOf(file.response.file);
+                this.candidate.resumeIds.splice(index, 1);
+                console.log(this.candidate.resumeIds)
             },
             handleSuccess(response, file, fileList) {
                 console.log(response, file, fileList);
-                this.fileIds.push(response.file);
+                this.candidate.resumeIds.push(response.file);
             },
         }
     }
