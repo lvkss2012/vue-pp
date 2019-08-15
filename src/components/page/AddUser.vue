@@ -55,7 +55,7 @@
                             :on-remove="handleRemove"
                             :on-success="handleSuccess"
                             :file-list="fileList"
-                            action="http://localhost:4000/api/v1/files">
+                            action="http://localhost:4000/api/files">
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                     </el-upload>
@@ -84,7 +84,7 @@
                     interviewDateTime: "",
                     interviewer: "",
                     interviewResult: "",
-                    resumeIds: [],
+                    resumeId: null,
                 },
                 readonly: true,
                 fileList: [],
@@ -109,6 +109,7 @@
         methods: {
             onSubmit() {
                 let data = Object.assign({}, this.candidate);
+                delete data._id;
                 this.readonly = !this.readonly;
                 this.$axios({
                     url: this.currentId ? `candidates/${this.currentId}` : 'candidates',
@@ -129,14 +130,12 @@
                 this.$router.push('/hrManager')
             },
             handleRemove(file, fileList) {
-                console.log(file, fileList);
-                let index = this.candidate.resumeIds.indexOf(file.response.file);
-                this.candidate.resumeIds.splice(index, 1);
-                console.log(this.candidate.resumeIds)
+                this.candidate.resumeId = null;
             },
             handleSuccess(response, file, fileList) {
-                console.log(response, file, fileList);
-                this.candidate.resumeIds.push(response.file);
+                if (response.code === 'SUCCESS' && response.data && response.data) {
+                    this.candidate.resumeId = response.data.id;
+                }
             },
         }
     }
