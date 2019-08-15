@@ -1,3 +1,10 @@
+import 'babel-polyfill'
+import Promise from 'promise-polyfill'
+//为兼容ie11 否则会报错 "Promise"未定义
+if (!window.Promise) {
+    window.Promise = Promise;
+}
+
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router'
