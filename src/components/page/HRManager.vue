@@ -64,7 +64,7 @@
                         <el-button
                                 type="text"
                                 size="mini"
-                                @click="handleDelete(scope.$index, scope.row)">下载简历
+                                @click="handleDownload(scope.$index, scope.row)">下载简历
                         </el-button>
                     </template>
                 </el-table-column>
@@ -124,7 +124,49 @@
                 this.$router.push({path: 'addUser', query: {_id: row._id}})
             },
             handleDelete(index, row) {
-                console.log(index, row);
+                let that = this;
+                this.$confirm('删除简历, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$axios.delete(`candidates/${row._id}`)
+                        .then(data => {
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            });
+                            that.candidates = that.candidates.find(item => item._id !== row._id);
+                        })
+                        .catch(err => {
+                            this.$message({
+                                type: 'success',
+                                message: '删除失败!'
+                            });
+                        })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            handleDownload(index, row) {
+                let url = `http://localhost:4000/api/files/${row.resumeId}`;
+                this.$axios.get(url + '/info')
+                    .then(data => {
+                        this.$axios.get(url, {
+                            responseType: 'blob'
+                        })
+                            .then(result => {
+                                const url = window.URL.createObjectURL(new Blob([result.data]));
+                                const link = document.createElement('a');
+                                link.href = url;
+                                link.setAttribute('download', data.data.data.filename);
+                                document.body.appendChild(link);
+                                link.click();
+                            });
+                    })
             },
             indexMethod(index) {
                 return index + 1;
